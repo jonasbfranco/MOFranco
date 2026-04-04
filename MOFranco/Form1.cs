@@ -339,6 +339,10 @@ namespace MOFranco
             lblTempoFormatado.Text = string.Empty;
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
     } // Fechamento da classe FrmPrincipal
 
 }
