@@ -42,10 +42,10 @@
             lblNomePrograma = new Label();
             btnPipoca = new Button();
             groupBox1 = new GroupBox();
-            btnLeite = new Button();
-            btnCarnesdeBoi = new Button();
-            btnFrango = new Button();
             btnFeijao = new Button();
+            btnFrango = new Button();
+            btnCarnesdeBoi = new Button();
+            btnLeite = new Button();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
@@ -93,7 +93,7 @@
             // 
             // progressBar1
             // 
-            progressBar1.Location = new Point(81, 514);
+            progressBar1.Location = new Point(81, 666);
             progressBar1.Name = "progressBar1";
             progressBar1.Size = new Size(579, 23);
             progressBar1.TabIndex = 5;
@@ -101,7 +101,7 @@
             // lblInfo
             // 
             lblInfo.AutoSize = true;
-            lblInfo.Location = new Point(81, 202);
+            lblInfo.Location = new Point(81, 337);
             lblInfo.Name = "lblInfo";
             lblInfo.Size = new Size(28, 15);
             lblInfo.TabIndex = 6;
@@ -110,16 +110,17 @@
             // lblStatus
             // 
             lblStatus.AutoSize = true;
-            lblStatus.Location = new Point(83, 311);
+            lblStatus.Location = new Point(81, 194);
             lblStatus.Name = "lblStatus";
             lblStatus.Size = new Size(39, 15);
             lblStatus.TabIndex = 7;
             lblStatus.Text = "Status";
+            lblStatus.Visible = false;
             // 
             // lblProgresso
             // 
             lblProgresso.AutoSize = true;
-            lblProgresso.Location = new Point(81, 352);
+            lblProgresso.Location = new Point(81, 370);
             lblProgresso.Name = "lblProgresso";
             lblProgresso.Size = new Size(59, 15);
             lblProgresso.TabIndex = 8;
@@ -128,11 +129,12 @@
             // lblTempoFormatado
             // 
             lblTempoFormatado.AutoSize = true;
-            lblTempoFormatado.Location = new Point(81, 258);
+            lblTempoFormatado.Location = new Point(83, 235);
             lblTempoFormatado.Name = "lblTempoFormatado";
             lblTempoFormatado.Size = new Size(57, 15);
             lblTempoFormatado.TabIndex = 9;
             lblTempoFormatado.Text = "Tempo(s)";
+            lblTempoFormatado.Visible = false;
             // 
             // btnCancelar
             // 
@@ -154,7 +156,6 @@
             lblNomePrograma.TabIndex = 11;
             lblNomePrograma.Text = "Micro Ondas Franco";
             lblNomePrograma.TextAlign = ContentAlignment.TopCenter;
-            lblNomePrograma.Click += lblNomePrograma_Click;
             // 
             // btnPipoca
             // 
@@ -178,24 +179,14 @@
             groupBox1.TabIndex = 13;
             groupBox1.TabStop = false;
             // 
-            // btnLeite
+            // btnFeijao
             // 
-            btnLeite.Location = new Point(206, 31);
-            btnLeite.Name = "btnLeite";
-            btnLeite.Size = new Size(123, 23);
-            btnLeite.TabIndex = 13;
-            btnLeite.Text = "Leite";
-            btnLeite.UseVisualStyleBackColor = true;
-            // 
-            // btnCarnesdeBoi
-            // 
-            btnCarnesdeBoi.Location = new Point(53, 72);
-            btnCarnesdeBoi.Name = "btnCarnesdeBoi";
-            btnCarnesdeBoi.Size = new Size(123, 23);
-            btnCarnesdeBoi.TabIndex = 14;
-            btnCarnesdeBoi.Text = "Carnes de Boi";
-            btnCarnesdeBoi.UseVisualStyleBackColor = true;
-            btnCarnesdeBoi.Click += button1_Click;
+            btnFeijao.Location = new Point(133, 110);
+            btnFeijao.Name = "btnFeijao";
+            btnFeijao.Size = new Size(123, 23);
+            btnFeijao.TabIndex = 16;
+            btnFeijao.Text = "Feijão";
+            btnFeijao.UseVisualStyleBackColor = true;
             // 
             // btnFrango
             // 
@@ -206,20 +197,29 @@
             btnFrango.Text = "Frango";
             btnFrango.UseVisualStyleBackColor = true;
             // 
-            // btnFeijao
+            // btnCarnesdeBoi
             // 
-            btnFeijao.Location = new Point(133, 110);
-            btnFeijao.Name = "btnFeijao";
-            btnFeijao.Size = new Size(123, 23);
-            btnFeijao.TabIndex = 16;
-            btnFeijao.Text = "Feijão";
-            btnFeijao.UseVisualStyleBackColor = true;
+            btnCarnesdeBoi.Location = new Point(53, 72);
+            btnCarnesdeBoi.Name = "btnCarnesdeBoi";
+            btnCarnesdeBoi.Size = new Size(123, 23);
+            btnCarnesdeBoi.TabIndex = 14;
+            btnCarnesdeBoi.Text = "Carnes de Boi";
+            btnCarnesdeBoi.UseVisualStyleBackColor = true;
+            // 
+            // btnLeite
+            // 
+            btnLeite.Location = new Point(206, 31);
+            btnLeite.Name = "btnLeite";
+            btnLeite.Size = new Size(123, 23);
+            btnLeite.TabIndex = 13;
+            btnLeite.Text = "Leite";
+            btnLeite.UseVisualStyleBackColor = true;
             // 
             // FrmPrincipal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(769, 579);
+            ClientSize = new Size(769, 701);
             Controls.Add(lblNomePrograma);
             Controls.Add(btnCancelar);
             Controls.Add(lblTempoFormatado);
