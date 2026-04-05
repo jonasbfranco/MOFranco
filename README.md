@@ -181,16 +181,170 @@ This is a challenge by [Coodesh](https://coodesh.com/)
 **Jonas Franco**
 Analista de Sistemas | Especialista em Integração e Inovação
 
+
 ---
 
-# 🔥 Insight estratégico (nível recrutador)
+## 🧠 Explicação Técnica do Projeto
 
-Esse README mostra exatamente o que recrutadores buscam:
+Este projeto foi desenvolvido com o objetivo de simular o funcionamento de um micro-ondas, aplicando princípios sólidos de **orientação a objetos**, **separação de responsabilidades** e **boas práticas de desenvolvimento em .NET**.
 
-✔ Clareza de escopo
-✔ Organização técnica
-✔ Regras de negócio bem implementadas
-✔ Preocupação com UX
-✔ Base pronta para escalar
+A solução foi estruturada para evoluir progressivamente em complexidade, acompanhando requisitos funcionais crescentes (níveis 1, 2 e 3), o que demonstra capacidade de construção incremental e organização de código.
+
+---
+
+## 🏗️ Arquitetura e Organização
+
+A aplicação foi organizada em três pilares principais:
+
+### 🔹 1. Camada de Interface (Forms)
+
+Responsável pela interação com o usuário:
+
+- `FrmPrincipal`
+- `FrmCadastroPrograma`
+
+Essa camada contém apenas lógica de UI, como:
+
+- Exibição de dados  
+- Captura de eventos (cliques, seleção, etc.)  
+- Atualização visual (labels, progressbar, listbox)  
+
+---
+
+### 🔹 2. Camada de Domínio (Entidades)
+
+Representada pela classe:
+
+- `ProgramaAquecimento`
+
+Responsável por encapsular os dados do negócio:
+
+- Nome  
+- Alimento  
+- Tempo  
+- Potência  
+- Caractere de aquecimento  
+- Instruções  
+
+Essa separação garante:
+
+- ✔ Reutilização  
+- ✔ Clareza  
+- ✔ Facilidade de manutenção  
+
+---
+
+### 🔹 3. Camada de Regras de Negócio
+
+Implementada principalmente dentro do `FrmPrincipal`, mas organizada em métodos específicos:
+
+- `ValidarTempo`  
+- `ValidarPotencia`  
+- `ValidarCaractere`  
+- `CadastrarProgramaCustomizado`  
+- `EditarPrograma`  
+- `ExcluirPrograma`  
+
+Esses métodos centralizam regras como:
+
+- Limites de tempo e potência  
+- Proibição de caracteres duplicados  
+- Restrições de programas pré-definidos  
+- Controle de estados (Parado, Aquecendo, Pausado)  
+
+---
+
+## 🔄 Máquina de Estados
+
+O comportamento do micro-ondas foi modelado com um `enum`:
+
+```csharp
+enum EstadoAquecimento
+{
+    Parado,
+    Aquecendo,
+    Pausado
+}
+````
+
+Essa abordagem evita inconsistências e permite controlar com precisão:
+
+* Início do aquecimento
+* Pausa
+* Retomada
+* Cancelamento
+
+---
+
+## ⚙️ Funcionalidades Implementadas
+
+### ✅ Aquecimento Manual
+
+* Definição de tempo e potência
+* Incremento de +30 segundos
+* Barra de progresso em tempo real
+
+---
+
+### ✅ Programas Pré-definidos
+
+* 5 programas fixos (não editáveis)
+* Preenchimento automático de dados
+* Bloqueio de edição
+* Strings de aquecimento únicas
+
+---
+
+### ✅ Programas Customizados
+
+* Cadastro completo via formulário
+* Validações robustas (campos obrigatórios e regras)
+* Diferenciação visual (itálico no ListBox)
+* Persistência em JSON
+
+---
+
+### ✅ Persistência de Dados
+
+Utilização de:
+
+* `System.Text.Json`
+
+Permite:
+
+* Salvar programas customizados em arquivo local
+* Recarregar automaticamente ao iniciar o sistema
+
+---
+
+### ✅ Edição e Exclusão
+
+* Edição controlada (sem duplicidade de caractere)
+* Exclusão restrita a programas customizados
+
+---
+
+## ⚠️ Tratamento de Erros e Validações
+
+O sistema possui validações distribuídas estrategicamente:
+
+* **UI (Formulário)** → feedback imediato ao usuário
+* **Regra de negócio** → garantia de integridade
+
+Exemplos:
+
+* `TryParse` para evitar falhas de conversão
+* `MessageBox` com foco automático no campo inválido
+* Bloqueio de fechamento do formulário em caso de erro
+
+---
+
+## 🚀 Diferenciais Técnicos
+
+* Uso de `async/await` para simulação de aquecimento sem travar a UI
+* Atualização de UI com `Invoke` (thread-safe)
+* Uso de `StringBuilder` para performance na montagem do progresso
+* Customização de `ListBox` com `DrawItem` (itálico para customizados)
+* Sobrescrita de `ToString()` para integração limpa com UI
 
 ---
