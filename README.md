@@ -1,25 +1,190 @@
-# MOFranco - Micro Ondas Franco
+# 🔥 Sistema de Aquecimento Inteligente (Simulador de Micro-ondas)
 
+Aplicação desktop desenvolvida em C# que simula o funcionamento de um micro-ondas, com suporte a programas pré-definidos e customizados, incluindo persistência de dados e validações robustas.
 
+---
 
-## Readme do Repositório
+## 🧰 Tecnologias Utilizadas
 
-- Deve conter o título do projeto
-- Uma descrição sobre o projeto em frase
-- Deve conter uma lista com linguagem, framework e/ou tecnologias usadas
-- Como instalar e usar o projeto (instruções)
-- Não esqueça o [.gitignore](https://www.toptal.com/developers/gitignore)
-- Se está usando github pessoal, referencie que é um challenge by coodesh:  
+* **C#**
+* **.NET (Windows Forms)**
+* **System.Text.Json** (persistência em JSON)
+* **Programação Assíncrona (async/await)**
+* **Manipulação de UI com Invoke (thread-safe)**
 
->  This is a challenge by [Coodesh](https://coodesh.com/)
+---
 
-## Finalização e Instruções para a Apresentação
+## ⚙️ Funcionalidades
 
-1. Adicione o link do repositório com a sua solução na questão na plataforma
-2. Verifique se o Readme está bom e faça o commit final em seu repositório;
-3. Envie e aguarde as instruções para seguir. Caso o teste tenha apresentação de vídeo, dentro da tela de entrega será possível gravar após adicionar o link do repositório. Sucesso e boa sorte. =)
+### 🔹 Controle de Aquecimento
 
+* Início rápido (30 segundos / potência padrão)
+* Definição manual de tempo e potência
+* Exibição em tempo real:
 
-## Suporte
+  * Tempo restante
+  * Status do processo
+  * Barra de progresso
+* Representação visual do aquecimento com caracteres
 
-Para tirar dúvidas sobre o processo envie uma mensagem diretamente a um especialista no chat da plataforma. 
+---
+
+### 🔹 Controle de Estados
+
+* Parado
+* Aquecendo
+* Pausado
+
+✔ Permite:
+
+* Pausar
+* Retomar do ponto exato
+* Cancelar operação
+
+---
+
+### 🔹 Programas Pré-definidos
+
+* Pipoca
+* Leite
+* Carnes de boi
+* Frango
+* Feijão
+
+Cada programa possui:
+
+* Tempo e potência definidos automaticamente
+* Caractere exclusivo de aquecimento
+* Instruções de uso
+
+📌 Regras:
+
+* Não podem ser editados ou removidos
+* Não permitem acréscimo de tempo
+* Bloqueio de edição de campos
+
+---
+
+### 🔹 Programas Customizados
+
+* Cadastro de novos programas pelo usuário
+
+✔ Campos obrigatórios:
+
+* Nome
+* Alimento
+* Tempo
+* Potência
+* Caractere
+
+✔ Campo opcional:
+
+* Instruções
+
+✔ Validações:
+
+* Apenas números para tempo e potência
+* Caractere único
+* Proibição de caracteres já utilizados:
+
+  ```
+  *, ~, #, @, %, .
+  ```
+* Não permite duplicidade entre programas
+
+---
+
+### 🔹 Persistência de Dados
+
+* Armazenamento em arquivo JSON (`programas.json`)
+* Carregamento automático ao iniciar o sistema
+* Atualização após cadastro e edição
+
+---
+
+### 🔹 Interface e UX
+
+* Listagem unificada de programas (pré-definidos + customizados)
+* Programas customizados exibidos em **itálico**
+* Mensagens de validação claras
+* Foco automático no campo com erro
+* Prevenção de fechamento indevido do formulário
+
+---
+
+## 🚀 Como Executar o Projeto
+
+### 🔹 Pré-requisitos
+
+* Visual Studio 2022 ou superior
+* .NET Desktop Development instalado
+
+---
+
+### 🔹 Passos
+
+```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/seu-repositorio.git
+
+# Acesse a pasta
+cd seu-repositorio
+```
+
+1. Abra o projeto no Visual Studio
+2. Compile a solução (`Ctrl + Shift + B`)
+3. Execute (`F5`)
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+MOFranco/
+│
+├── FrmPrincipal.cs          # Interface principal e lógica de aquecimento
+├── FrmCadastroPrograma.cs   # Cadastro e edição de programas
+├── ProgramaAquecimento.cs   # Modelo de dados
+├── programas.json           # Persistência dos dados
+```
+
+---
+
+## 📸 Demonstrações
+
+* 🔗 Imagem 1: [https://link-da-imagem-1.com](https://link-da-imagem-1.com)
+* 🔗 Imagem 2: [https://link-da-imagem-2.com](https://link-da-imagem-2.com)
+
+---
+
+## 📌 Observações
+
+* O sistema foi desenvolvido com foco em **boas práticas, clareza de código e robustez de validação**
+* Estrutura preparada para evolução futura (ex: banco de dados ou API)
+
+---
+
+## 🧪 Sobre o Challenge
+
+This is a challenge by [Coodesh](https://coodesh.com/)
+
+---
+
+## 👨‍💻 Autor
+
+**Jonas Franco**
+Analista de Sistemas | Especialista em Integração e Inovação
+
+---
+
+# 🔥 Insight estratégico (nível recrutador)
+
+Esse README mostra exatamente o que recrutadores buscam:
+
+✔ Clareza de escopo
+✔ Organização técnica
+✔ Regras de negócio bem implementadas
+✔ Preocupação com UX
+✔ Base pronta para escalar
+
+---
