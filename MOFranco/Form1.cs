@@ -31,7 +31,7 @@ namespace MOFranco
             {
                 Nome = "Pipoca",
                 Alimento = "Pipoca (de micro-ondas)",
-                Tempo = 180,
+                Tempo = 180, // 3 minutos
                 Potencia = 7,
                 StringAquecimento = "*",
                 Instrucoes = "Observar o barulho de estouros. Se houver intervalo maior que 10 segundos, interrompa."
@@ -40,7 +40,7 @@ namespace MOFranco
             {
                 Nome = "Leite",
                 Alimento = "Leite",
-                Tempo = 300,
+                Tempo = 300, // 5 minutos
                 Potencia = 5,
                 StringAquecimento = "~",
                 Instrucoes = "Cuidado com aquecimento de líquidos. O movimento pode causar fervura imediata e risco de queimaduras."
