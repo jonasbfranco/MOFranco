@@ -34,11 +34,17 @@ namespace MOFranco
         {
             try
             {
+                string caractere = txtCaractere.Text;
+
+                if (string.IsNullOrWhiteSpace(caractere))
+                    throw new Exception("Informe um caractere.");
+
+
                 string nome = txtNome.Text;
                 string alimento = txtAlimento.Text;
                 int tempo = int.Parse(txtTempo.Text);
                 int potencia = int.Parse(txtPotencia.Text);
-                string caractere = txtCaractere.Text;
+                // string caractere = txtCaractere.Text;
                 string instrucoes = txtInstrucoes.Text;
 
                 
@@ -56,15 +62,17 @@ namespace MOFranco
                 DialogResult = DialogResult.OK;
                 Close();
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Preencha os campos corretamente.");
+                //MessageBox.Show("Preencha os campos corretamente.");
+                MessageBox.Show(ex.Message);
             }
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
-
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
     }
 }

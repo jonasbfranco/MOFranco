@@ -51,6 +51,7 @@
             btnEditar = new Button();
             btnNovoPrograma = new Button();
             lstProgramas = new ListBox();
+            btnFecharPrograma = new Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
@@ -271,11 +272,22 @@
             lstProgramas.TabIndex = 15;
             lstProgramas.SelectedIndexChanged += lstProgramas_SelectedIndexChanged;
             // 
+            // btnFecharPrograma
+            // 
+            btnFecharPrograma.Location = new Point(767, 666);
+            btnFecharPrograma.Name = "btnFecharPrograma";
+            btnFecharPrograma.Size = new Size(134, 23);
+            btnFecharPrograma.TabIndex = 16;
+            btnFecharPrograma.Text = "Fechar Programa";
+            btnFecharPrograma.UseVisualStyleBackColor = true;
+            btnFecharPrograma.Click += btnFecharPrograma_Click;
+            // 
             // FrmPrincipal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(973, 701);
+            Controls.Add(btnFecharPrograma);
             Controls.Add(lstProgramas);
             Controls.Add(groupBox2);
             Controls.Add(lblNomePrograma);
@@ -327,5 +339,6 @@
         private Button btnEditar;
         private ListBox lstProgramas;
         private Button btnExcluir;
+        private Button btnFecharPrograma;
     }
 }

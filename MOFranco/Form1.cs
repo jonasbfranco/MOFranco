@@ -294,7 +294,7 @@ namespace MOFranco
         private void ValidarTempo(int tempo)
         {
             if (tempo < 1 || tempo > 900)
-                throw new Exception("O tempo deve estar entre 1 e 120 segundos.");
+                throw new Exception("O tempo deve estar entre 1 e 900 segundos.");
         }
 
         // Validação de potência
@@ -448,9 +448,9 @@ namespace MOFranco
             btnCarnesdeBoi.Click += btnPrograma_Click;
             btnFrango.Click += btnPrograma_Click;
             btnFeijao.Click += btnPrograma_Click;
-            
+
             CarregarProgramasJson();
-            CarregarProgramas(); 
+            CarregarProgramas();
 
             lstProgramas.DrawMode = DrawMode.OwnerDrawFixed;
             lstProgramas.DrawItem += lstProgramas_DrawItem;
@@ -504,35 +504,6 @@ namespace MOFranco
 
 
 
-        private void CadastrarProgramaCustomizado(string nome, string alimento, int tempo, int potencia, string caractere, string instrucoes)
-        {
-            if (string.IsNullOrWhiteSpace(nome) ||
-                string.IsNullOrWhiteSpace(alimento) ||
-                string.IsNullOrWhiteSpace(caractere))
-            {
-                throw new Exception("Preencha todos os campos obrigatórios.");
-            }
-
-            ValidarTempo(tempo);
-            ValidarPotencia(potencia);
-            ValidarCaractere(caractere);
-
-            var novoPrograma = new ProgramaAquecimento
-            {
-                Nome = nome,
-                Alimento = alimento,
-                Tempo = tempo,
-                Potencia = potencia,
-                StringAquecimento = caractere,
-                Instrucoes = instrucoes
-            };
-
-            programasCustomizados.Add(novoPrograma);
-
-            SalvarProgramasJson(); // persistência
-        }
-
-
 
         private void CadastrarProgramaCustomizado(ProgramaAquecimento novoPrograma)
         {
@@ -548,6 +519,7 @@ namespace MOFranco
             programasCustomizados.Add(novoPrograma);
             SalvarProgramasJson();
             CarregarProgramas();
+            lstProgramas.SelectedItem = novoPrograma;
         }
 
 
@@ -579,31 +551,22 @@ namespace MOFranco
         }
 
 
-        private List<ProgramaAquecimento> ObterTodosProgramas()
-        {
-            return programas.Concat(programasCustomizados).ToList();
-        }
-
         private void btnNovoPrograma_Click(object sender, EventArgs e)
         {
             var form = new FrmCadastroPrograma();
-
-            /*if (form.ShowDialog() == DialogResult.OK)
-                {
-                    CadastrarProgramaCustomizado(
-                        form.Programa.Nome,
-                        form.Programa.Alimento,
-                        form.Programa.Tempo,
-                        form.Programa.Potencia,
-                        form.Programa.StringAquecimento,
-                        form.Programa.Instrucoes
-                    );
-                }*/
-            if (form.ShowDialog() == DialogResult.OK && form.Programa != null)
+            try
+            {
+                if (form.ShowDialog() == DialogResult.OK && form.Programa != null)
                 {
                     CadastrarProgramaCustomizado(form.Programa);
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
+
 
         private void btnEditar_Click(object sender, EventArgs e)
         {
@@ -648,7 +611,13 @@ namespace MOFranco
                 SelecionarPrograma(programa);
             }
         }
-    
+
+        private void btnFecharPrograma_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
 
     } // Fechamento da classe FrmPrincipal
 
