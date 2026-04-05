@@ -4,7 +4,8 @@ using System.Text;
 
 namespace MOFranco
 {
-    internal class ProgramaAquecimento
+    // internal class ProgramaAquecimento
+    public class ProgramaAquecimento
     {
         public string Nome { get; set; }
         public string Alimento { get; set; }
