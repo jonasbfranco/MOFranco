@@ -455,6 +455,9 @@ namespace MOFranco
             lstProgramas.DrawMode = DrawMode.OwnerDrawFixed;
             lstProgramas.DrawItem += lstProgramas_DrawItem;
 
+            btnExcluir.Enabled = false;
+            lstProgramas.SelectedIndexChanged += lstProgramas_SelectedIndexChanged;
+
         }
 
 
@@ -559,14 +562,14 @@ namespace MOFranco
 
             //try
             //{
-                if (form.ShowDialog() == DialogResult.OK && form.Programa != null)
-                {
-                    CadastrarProgramaCustomizado(form.Programa);
-                }
+            if (form.ShowDialog() == DialogResult.OK && form.Programa != null)
+            {
+                CadastrarProgramaCustomizado(form.Programa);
+            }
             //}
             //catch (Exception ex)
             //{
-              //  MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //  MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             //}
         }
 
@@ -612,13 +615,81 @@ namespace MOFranco
             if (lstProgramas.SelectedItem is ProgramaAquecimento programa)
             {
                 SelecionarPrograma(programa);
+                btnExcluir.Enabled = !programas.Contains(programa); 
             }
+            else
+            {
+                btnExcluir.Enabled = false;
+            }
+
         }
+
+
+        // método para excluir programa customizado
+        private void ExcluirPrograma(ProgramaAquecimento programa)
+        {
+            if (programa == null)
+                return;
+
+            // Impede excluir programas padrão
+            if (programas.Contains(programa))
+            {
+                MessageBox.Show(
+                    "Programas padrão não podem ser excluídos.",
+                    "Aviso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                return;
+            }
+
+            // Confirmação
+            var confirmacao = MessageBox.Show(
+                $"Deseja realmente excluir o programa '{programa.Nome}'?",
+                "Confirmação",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (confirmacao != DialogResult.Yes)
+                return;
+
+            // Remove
+            programasCustomizados.Remove(programa);
+
+            // Salva
+            SalvarProgramasJson();
+
+            // Atualiza tela
+            CarregarProgramas();
+
+            // Limpa seleção
+            programaSelecionado = null;
+            LimparTela();
+        }
+
 
         private void btnFecharPrograma_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
             Close();
+        }
+
+        private void btnExcluir_Click(object sender, EventArgs e)
+        {
+            if (lstProgramas.SelectedItem is ProgramaAquecimento programa)
+            {
+                ExcluirPrograma(programa);
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Selecione um programa para excluir.",
+                    "Aviso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+            }
         }
 
 
