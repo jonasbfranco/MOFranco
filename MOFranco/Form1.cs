@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json;
 
 
 namespace MOFranco
@@ -25,7 +26,7 @@ namespace MOFranco
         private EstadoAquecimento estadoAtual = EstadoAquecimento.Parado;
 
         private List<ProgramaAquecimento> programas = new List<ProgramaAquecimento>
-        
+
         {
             new ProgramaAquecimento
             {
@@ -75,6 +76,10 @@ namespace MOFranco
         };
 
         private ProgramaAquecimento programaSelecionado = null;
+
+        private List<ProgramaAquecimento> programasCustomizados = new List<ProgramaAquecimento>();
+
+
 
 
 
@@ -384,6 +389,29 @@ namespace MOFranco
         }
 
 
+        private void ValidarCaractere(string caractere)
+        {
+            if (string.IsNullOrWhiteSpace(caractere) || caractere.Length != 1)
+                throw new Exception("Informe apenas um caractere de aquecimento.");
+
+            char c = caractere[0];
+
+            // caracteres proibidos (padrão + programas fixos)
+            var proibidos = new HashSet<char> { '.', '*', '~', '#', '@', '%' };
+
+            if (proibidos.Contains(c))
+                throw new Exception("Caractere inválido ou já utilizado pelos programas padrão.");
+
+            // verificar se já existe nos customizados
+            if (programasCustomizados.Any(p => p.StringAquecimento == caractere))
+                throw new Exception("Este caractere já foi utilizado em outro programa.");
+        }
+
+
+
+
+
+
         private void FrmPrincipal_Load(object sender, EventArgs e)
         {
             // Inicializa estado da UI ao carregar
@@ -407,9 +435,10 @@ namespace MOFranco
             btnCarnesdeBoi.Click += btnPrograma_Click;
             btnFrango.Click += btnPrograma_Click;
             btnFeijao.Click += btnPrograma_Click;
+            CarregarProgramasJson();
         }
 
-        
+
 
 
         private void SelecionarPrograma(ProgramaAquecimento programa)
@@ -427,8 +456,41 @@ namespace MOFranco
 
             lblTempoFormatado.Text = FormatarTempo(tempoRestante);
 
+            // lblInfo.Text = $"{programa.Nome} | {programa.Alimento} | {programa.Instrucoes}";
             lblInfo.Text = $"Programa: {programa.Nome}\nAlimento: {programa.Alimento}\nInstruções: {programa.Instrucoes}";
         }
+
+
+
+        private void CadastrarProgramaCustomizado(string nome, string alimento, int tempo, int potencia, string caractere, string instrucoes)
+        {
+            if (string.IsNullOrWhiteSpace(nome) ||
+                string.IsNullOrWhiteSpace(alimento) ||
+                string.IsNullOrWhiteSpace(caractere))
+            {
+                throw new Exception("Preencha todos os campos obrigatórios.");
+            }
+
+            ValidarTempo(tempo);
+            ValidarPotencia(potencia);
+            ValidarCaractere(caractere);
+
+            var novoPrograma = new ProgramaAquecimento
+            {
+                Nome = nome,
+                Alimento = alimento,
+                Tempo = tempo,
+                Potencia = potencia,
+                StringAquecimento = caractere,
+                Instrucoes = instrucoes
+            };
+
+            programasCustomizados.Add(novoPrograma);
+
+            SalvarProgramasJson(); // persistência
+        }
+
+
 
 
         private void btnPrograma_Click(object sender, EventArgs e)
@@ -440,6 +502,29 @@ namespace MOFranco
                 SelecionarPrograma(programa);
             }
         }
+
+
+        private void SalvarProgramasJson()
+        {
+            string json = JsonSerializer.Serialize(programasCustomizados);
+            File.WriteAllText("programas.json", json);
+        }
+
+        private void CarregarProgramasJson()
+        {
+            if (File.Exists("programas.json"))
+            {
+                string json = File.ReadAllText("programas.json");
+                programasCustomizados = JsonSerializer.Deserialize<List<ProgramaAquecimento>>(json) ?? new List<ProgramaAquecimento>();
+            }
+        }
+
+
+        private List<ProgramaAquecimento> ObterTodosProgramas()
+        {
+            return programas.Concat(programasCustomizados).ToList();
+        }
+
 
 
     } // Fechamento da classe FrmPrincipal
