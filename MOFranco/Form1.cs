@@ -1,5 +1,5 @@
 using System.Text;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+
 
 namespace MOFranco
 {
@@ -24,6 +24,59 @@ namespace MOFranco
         private StringBuilder progresso = new StringBuilder();
         private EstadoAquecimento estadoAtual = EstadoAquecimento.Parado;
 
+        private List<ProgramaAquecimento> programas = new List<ProgramaAquecimento>
+        
+        {
+            new ProgramaAquecimento
+            {
+                Nome = "Pipoca",
+                Alimento = "Pipoca (de micro-ondas)",
+                Tempo = 180, // 3 minutos
+                Potencia = 7,
+                StringAquecimento = "*",
+                Instrucoes = "Observar o barulho de estouros. Se houver intervalo maior que 10 segundos, interrompa."
+            },
+            new ProgramaAquecimento
+            {
+                Nome = "Leite",
+                Alimento = "Leite",
+                Tempo = 300, // 5 minutos
+                Potencia = 5,
+                StringAquecimento = "~",
+                Instrucoes = "Cuidado com aquecimento de líquidos. O movimento pode causar fervura imediata e risco de queimaduras."
+            },
+            new ProgramaAquecimento
+            {
+                Nome = "Carnes de boi",
+                Alimento = "Carne em pedaço ou fatias",
+                Tempo = 840, // 14 minutos
+                Potencia = 4,
+                StringAquecimento = "#",
+                Instrucoes = "Interrompa na metade e vire o conteúdo para descongelamento uniforme."
+            },
+            new ProgramaAquecimento
+            {
+                Nome = "Frango",
+                Alimento = "Frango (qualquer corte)",
+                Tempo = 480, // 8 minutos
+                Potencia = 7,
+                StringAquecimento = "@",
+                Instrucoes = "Interrompa na metade e vire o conteúdo para descongelamento uniforme."
+            },
+            new ProgramaAquecimento
+            {
+                Nome = "Feijão",
+                Alimento = "Feijão congelado",
+                Tempo = 480, // 8 minutos
+                Potencia = 9,
+                StringAquecimento = "%",
+                Instrucoes = "Deixe destampado. Cuidado ao retirar recipientes plásticos aquecidos."
+            }
+        };
+
+        private ProgramaAquecimento programaSelecionado = null;
+
+
 
 
         public FrmPrincipal()
@@ -46,7 +99,11 @@ namespace MOFranco
 
 
                 // Se já está rodando → soma +30
-                if (emExecucao && !pausado)
+                if (programaSelecionado != null)
+                {
+                    // NÃO permite +30 para programa pré-definido
+                }
+                else if (emExecucao && !pausado)
                 {
                     int novoTempo = tempoRestante + 30;
 
@@ -175,12 +232,13 @@ namespace MOFranco
                     progresso.Append(" ");
                 }
 
-                if ((tempoInicial - tempoRestante) % 20 == 0)
+                if ((tempoInicial - tempoRestante) % 18 == 0)
                 {
                     progresso.Append(Environment.NewLine);
                 }
 
-                progresso.Append(new string('.', potenciaAtual));
+                string caractere = programaSelecionado?.StringAquecimento ?? ".";
+                progresso.Append(new string(caractere[0], potenciaAtual));
 
 
                 Invoke(new Action(() =>
@@ -213,7 +271,7 @@ namespace MOFranco
         // Validação de tempo
         private void ValidarTempo(int tempo)
         {
-            if (tempo < 1 || tempo > 120)
+            if (tempo < 1 || tempo > 900)
                 throw new Exception("O tempo deve estar entre 1 e 120 segundos.");
         }
 
@@ -293,6 +351,11 @@ namespace MOFranco
             lblStatus.Text = "Cancelado";
 
             lblInfo.Text = $"Status: {lblStatus.Text}";
+
+            programaSelecionado = null;
+
+            txtTempo.Enabled = true;
+            txtPotencia.Enabled = true;
         }
 
         private void LimparTela()
@@ -320,11 +383,6 @@ namespace MOFranco
             lblStatus.Text = "Aquecendo...";
         }
 
-        private void lblNomePrograma_Click(object sender, EventArgs e)
-        {
-
-        }
-
 
         private void FrmPrincipal_Load(object sender, EventArgs e)
         {
@@ -337,7 +395,53 @@ namespace MOFranco
             lblInfo.Text = string.Empty;
             lblProgresso.Text = string.Empty;
             lblTempoFormatado.Text = string.Empty;
+
+            btnPipoca.Tag = programas[0];
+            btnLeite.Tag = programas[1];
+            btnCarnesdeBoi.Tag = programas[2];
+            btnFrango.Tag = programas[3];
+            btnFeijao.Tag = programas[4];
+
+            btnPipoca.Click += btnPrograma_Click;
+            btnLeite.Click += btnPrograma_Click;
+            btnCarnesdeBoi.Click += btnPrograma_Click;
+            btnFrango.Click += btnPrograma_Click;
+            btnFeijao.Click += btnPrograma_Click;
         }
+
+        
+
+
+        private void SelecionarPrograma(ProgramaAquecimento programa)
+        {
+            programaSelecionado = programa;
+
+            tempoRestante = programa.Tempo;
+            potenciaAtual = programa.Potencia;
+
+            txtTempo.Text = tempoRestante.ToString();
+            txtPotencia.Text = potenciaAtual.ToString();
+
+            txtTempo.Enabled = false;
+            txtPotencia.Enabled = false;
+
+            lblTempoFormatado.Text = FormatarTempo(tempoRestante);
+
+            // lblInfo.Text = $"{programa.Nome} | {programa.Alimento} | {programa.Instrucoes}";
+            lblInfo.Text = $"Programa: {programa.Nome}\nAlimento: {programa.Alimento}\nInstruções: {programa.Instrucoes}";
+        }
+
+
+        private void btnPrograma_Click(object sender, EventArgs e)
+        {
+            var botao = sender as Button;
+
+            if (botao?.Tag is ProgramaAquecimento programa)
+            {
+                SelecionarPrograma(programa);
+            }
+        }
+
 
     } // Fechamento da classe FrmPrincipal
 

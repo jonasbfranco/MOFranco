@@ -40,6 +40,13 @@
             lblTempoFormatado = new Label();
             btnCancelar = new Button();
             lblNomePrograma = new Label();
+            btnPipoca = new Button();
+            groupBox1 = new GroupBox();
+            btnFeijao = new Button();
+            btnFrango = new Button();
+            btnCarnesdeBoi = new Button();
+            btnLeite = new Button();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // txtTempo
@@ -86,15 +93,15 @@
             // 
             // progressBar1
             // 
-            progressBar1.Location = new Point(81, 381);
+            progressBar1.Location = new Point(81, 666);
             progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(546, 23);
+            progressBar1.Size = new Size(579, 23);
             progressBar1.TabIndex = 5;
             // 
             // lblInfo
             // 
             lblInfo.AutoSize = true;
-            lblInfo.Location = new Point(81, 173);
+            lblInfo.Location = new Point(81, 337);
             lblInfo.Name = "lblInfo";
             lblInfo.Size = new Size(28, 15);
             lblInfo.TabIndex = 6;
@@ -103,16 +110,17 @@
             // lblStatus
             // 
             lblStatus.AutoSize = true;
-            lblStatus.Location = new Point(81, 218);
+            lblStatus.Location = new Point(81, 194);
             lblStatus.Name = "lblStatus";
             lblStatus.Size = new Size(39, 15);
             lblStatus.TabIndex = 7;
             lblStatus.Text = "Status";
+            lblStatus.Visible = false;
             // 
             // lblProgresso
             // 
             lblProgresso.AutoSize = true;
-            lblProgresso.Location = new Point(81, 263);
+            lblProgresso.Location = new Point(81, 370);
             lblProgresso.Name = "lblProgresso";
             lblProgresso.Size = new Size(59, 15);
             lblProgresso.TabIndex = 8;
@@ -121,11 +129,12 @@
             // lblTempoFormatado
             // 
             lblTempoFormatado.AutoSize = true;
-            lblTempoFormatado.Location = new Point(81, 308);
+            lblTempoFormatado.Location = new Point(83, 235);
             lblTempoFormatado.Name = "lblTempoFormatado";
             lblTempoFormatado.Size = new Size(57, 15);
             lblTempoFormatado.TabIndex = 9;
             lblTempoFormatado.Text = "Tempo(s)";
+            lblTempoFormatado.Visible = false;
             // 
             // btnCancelar
             // 
@@ -147,13 +156,70 @@
             lblNomePrograma.TabIndex = 11;
             lblNomePrograma.Text = "Micro Ondas Franco";
             lblNomePrograma.TextAlign = ContentAlignment.TopCenter;
-            lblNomePrograma.Click += lblNomePrograma_Click;
+            // 
+            // btnPipoca
+            // 
+            btnPipoca.Location = new Point(53, 31);
+            btnPipoca.Name = "btnPipoca";
+            btnPipoca.Size = new Size(123, 23);
+            btnPipoca.TabIndex = 12;
+            btnPipoca.Text = "Pipoca";
+            btnPipoca.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(btnFeijao);
+            groupBox1.Controls.Add(btnFrango);
+            groupBox1.Controls.Add(btnCarnesdeBoi);
+            groupBox1.Controls.Add(btnLeite);
+            groupBox1.Controls.Add(btnPipoca);
+            groupBox1.Location = new Point(279, 163);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(381, 152);
+            groupBox1.TabIndex = 13;
+            groupBox1.TabStop = false;
+            // 
+            // btnFeijao
+            // 
+            btnFeijao.Location = new Point(133, 110);
+            btnFeijao.Name = "btnFeijao";
+            btnFeijao.Size = new Size(123, 23);
+            btnFeijao.TabIndex = 16;
+            btnFeijao.Text = "Feijão";
+            btnFeijao.UseVisualStyleBackColor = true;
+            // 
+            // btnFrango
+            // 
+            btnFrango.Location = new Point(206, 72);
+            btnFrango.Name = "btnFrango";
+            btnFrango.Size = new Size(123, 23);
+            btnFrango.TabIndex = 15;
+            btnFrango.Text = "Frango";
+            btnFrango.UseVisualStyleBackColor = true;
+            // 
+            // btnCarnesdeBoi
+            // 
+            btnCarnesdeBoi.Location = new Point(53, 72);
+            btnCarnesdeBoi.Name = "btnCarnesdeBoi";
+            btnCarnesdeBoi.Size = new Size(123, 23);
+            btnCarnesdeBoi.TabIndex = 14;
+            btnCarnesdeBoi.Text = "Carnes de Boi";
+            btnCarnesdeBoi.UseVisualStyleBackColor = true;
+            // 
+            // btnLeite
+            // 
+            btnLeite.Location = new Point(206, 31);
+            btnLeite.Name = "btnLeite";
+            btnLeite.Size = new Size(123, 23);
+            btnLeite.TabIndex = 13;
+            btnLeite.Text = "Leite";
+            btnLeite.UseVisualStyleBackColor = true;
             // 
             // FrmPrincipal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(769, 450);
+            ClientSize = new Size(769, 701);
             Controls.Add(lblNomePrograma);
             Controls.Add(btnCancelar);
             Controls.Add(lblTempoFormatado);
@@ -166,11 +232,13 @@
             Controls.Add(txtPotencia);
             Controls.Add(lblTempo);
             Controls.Add(txtTempo);
+            Controls.Add(groupBox1);
             KeyPreview = true;
             Name = "FrmPrincipal";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Micro Ondas Franco";
-            Load += this.FrmPrincipal_Load;
+            Load += FrmPrincipal_Load;
+            groupBox1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -189,5 +257,11 @@
         private Label lblTempoFormatado;
         private Button btnCancelar;
         private Label lblNomePrograma;
+        private Button btnPipoca;
+        private GroupBox groupBox1;
+        private Button btnCarnesdeBoi;
+        private Button btnLeite;
+        private Button btnFeijao;
+        private Button btnFrango;
     }
 }
