@@ -39,39 +39,85 @@ namespace MOFranco
         {
             try
             {
+                string nome = txtNome.Text.Trim();
+                string alimento = txtAlimento.Text.Trim();
+                string caractere = txtCaractere.Text.Trim();
+                string instrucoes = txtInstrucoes.Text.Trim();
 
-                string nome = txtNome.Text;
-                string alimento = txtAlimento.Text;
-                int tempo = int.Parse(txtTempo.Text);
-                int potencia = int.Parse(txtPotencia.Text);
-                string caractere = txtCaractere.Text;
-                string instrucoes = txtInstrucoes.Text;
-
-                if (string.IsNullOrWhiteSpace(nome) ||
-                    string.IsNullOrWhiteSpace(alimento) ||
-                    string.IsNullOrWhiteSpace(caractere))
+                // VALIDAÇÕES DE TEXTO
+                if (string.IsNullOrWhiteSpace(nome))
                 {
-                    throw new Exception("Preencha todos os campos obrigatórios.");
+                    MessageBox.Show("Nome precisa ser preenchido.", "Validação",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtNome.Focus();
+                    return;
                 }
 
+                if (string.IsNullOrWhiteSpace(alimento))
+                {
+                    MessageBox.Show("Alimento precisa ser preenchido.", "Validação",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtAlimento.Focus();
+                    return;
+                }
+
+                
+                // VALIDAÇÃO DE NÚMEROS
+                if (!int.TryParse(txtTempo.Text, out int tempo))
+                {
+                    MessageBox.Show("Tempo inválido. Digite apenas números.", "Validação",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtTempo.Focus();
+                    txtTempo.SelectAll();
+                    return;
+                }
+
+                if (!int.TryParse(txtPotencia.Text, out int potencia))
+                {
+                    MessageBox.Show("Potência inválida. Digite apenas números.", "Validação",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtPotencia.Focus();
+                    txtPotencia.SelectAll();
+                    return;
+                }
+
+                // VALIDAÇÕES DE TEXTO
+                if (string.IsNullOrWhiteSpace(caractere))
+                {
+                    MessageBox.Show("Caractere precisa ser preenchido.", "Validação",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtCaractere.Focus();
+                    return;
+                }
+
+
+                // VALIDAÇÃO DO CARACTERE
                 if (caractere.Length != 1)
                 {
-                    throw new Exception("Informe apenas um único caractere.");
+                    MessageBox.Show("Informe apenas um único caractere.", "Validação",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtCaractere.Focus();
+                    txtCaractere.SelectAll();
+                    return;
                 }
 
-                // valida caracteres proibidos
                 var caracteresPadrao = new[] { "*", "~", "#", "@", "%", "." };
 
                 if (caracteresPadrao.Contains(caractere))
                 {
-                    MessageBox.Show("Caractere já utilizado por programas padrão.");
+                    MessageBox.Show(
+                        "Este caractere já está sendo usado.\nEscolha outro para continuar.",
+                        "Validação",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
 
-                    txtCaractere.Focus();       // volta foco
-                    txtCaractere.SelectAll();   // seleciona para corrigir
-                    return;                     // NÃO fecha o form
+                    txtCaractere.Focus();
+                    txtCaractere.SelectAll();
+                    return;
                 }
 
-
+                // CRIA O PROGRAMA
                 Programa = new ProgramaAquecimento
                 {
                     Nome = nome,
@@ -87,9 +133,7 @@ namespace MOFranco
             }
             catch (Exception ex)
             {
-                //MessageBox.Show("Preencha os campos corretamente.");
                 MessageBox.Show(ex.Message);
-                txtCaractere.Focus();
             }
         }
 
