@@ -49,7 +49,7 @@ namespace MOFranco
             {
                 Nome = "Carnes de boi",
                 Alimento = "Carne em pedaço ou fatias",
-                Tempo = 840, // 🔥 14 minutos
+                Tempo = 840, // 14 minutos
                 Potencia = 4,
                 StringAquecimento = "#",
                 Instrucoes = "Interrompa na metade e vire o conteúdo para descongelamento uniforme."
@@ -58,7 +58,7 @@ namespace MOFranco
             {
                 Nome = "Frango",
                 Alimento = "Frango (qualquer corte)",
-                Tempo = 480, // 🔥 8 minutos
+                Tempo = 480, // 8 minutos
                 Potencia = 7,
                 StringAquecimento = "@",
                 Instrucoes = "Interrompa na metade e vire o conteúdo para descongelamento uniforme."
@@ -67,7 +67,7 @@ namespace MOFranco
             {
                 Nome = "Feijão",
                 Alimento = "Feijão congelado",
-                Tempo = 480, // 🔥 8 minutos
+                Tempo = 480, // 8 minutos
                 Potencia = 9,
                 StringAquecimento = "%",
                 Instrucoes = "Deixe destampado. Cuidado ao retirar recipientes plásticos aquecidos."
