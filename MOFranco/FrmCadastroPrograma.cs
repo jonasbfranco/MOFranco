@@ -18,15 +18,16 @@ namespace MOFranco
             InitializeComponent();
 
             if (programa != null)
-
+            {
                 Programa = programa;
 
-            /*txtNome.Text = programa.Nome;
-            txtAlimento.Text = programa.Alimento;
-            txtTempo.Text = programa.Tempo.ToString();
-            txtPotencia.Text = programa.Potencia.ToString();
-            txtCaractere.Text = programa.StringAquecimento;
-            txtInstrucoes.Text = programa.Instrucoes;*/
+                txtNome.Text = programa.Nome;
+                txtAlimento.Text = programa.Alimento;
+                txtTempo.Text = programa.Tempo.ToString();
+                txtPotencia.Text = programa.Potencia.ToString();
+                txtCaractere.Text = programa.StringAquecimento;
+                txtInstrucoes.Text = programa.Instrucoes;
+            }
         }
 
         private void btnSalvar_Click(object sender, EventArgs e)
@@ -39,6 +40,8 @@ namespace MOFranco
                 int potencia = int.Parse(txtPotencia.Text);
                 string caractere = txtCaractere.Text;
                 string instrucoes = txtInstrucoes.Text;
+
+                
 
                 Programa = new ProgramaAquecimento
                 {
@@ -57,6 +60,11 @@ namespace MOFranco
             {
                 MessageBox.Show("Preencha os campos corretamente.");
             }
+        }
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -80,6 +80,23 @@ namespace MOFranco
         private List<ProgramaAquecimento> programasCustomizados = new List<ProgramaAquecimento>();
 
 
+        // Carregar Programas
+        private void CarregarProgramas()
+        {
+            lstProgramas.Items.Clear();
+
+            // 🔹 Programas padrão
+            foreach (var p in programas)
+            {
+                lstProgramas.Items.Add(p);
+            }
+
+            // 🔹 Programas customizados
+            foreach (var p in programasCustomizados)
+            {
+                lstProgramas.Items.Add(p);
+            }
+        }
 
 
 
@@ -389,22 +406,18 @@ namespace MOFranco
         }
 
 
-        private void ValidarCaractere(string caractere)
+        private void ValidarCaractere(string caractere, ProgramaAquecimento programaAtual = null)
         {
-            if (string.IsNullOrWhiteSpace(caractere) || caractere.Length != 1)
-                throw new Exception("Informe apenas um caractere de aquecimento.");
+            var caracteresPadrao = new[] { "*", "~", "#", "@", "%", "." };
 
-            char c = caractere[0];
+            if (caracteresPadrao.Contains(caractere))
+                throw new Exception("Caractere inválido. Já usado por programas padrão.");
 
-            // caracteres proibidos (padrão + programas fixos)
-            var proibidos = new HashSet<char> { '.', '*', '~', '#', '@', '%' };
+            bool existe = programasCustomizados.Any(p =>
+                p.StringAquecimento == caractere && p != programaAtual);
 
-            if (proibidos.Contains(c))
-                throw new Exception("Caractere inválido ou já utilizado pelos programas padrão.");
-
-            // verificar se já existe nos customizados
-            if (programasCustomizados.Any(p => p.StringAquecimento == caractere))
-                throw new Exception("Este caractere já foi utilizado em outro programa.");
+            if (existe)
+                throw new Exception("Caractere já utilizado em outro programa.");
         }
 
 
@@ -436,6 +449,10 @@ namespace MOFranco
             btnFrango.Click += btnPrograma_Click;
             btnFeijao.Click += btnPrograma_Click;
             CarregarProgramasJson();
+
+            lstProgramas.DrawMode = DrawMode.OwnerDrawFixed;
+            lstProgramas.DrawItem += lstProgramas_DrawItem;
+
         }
 
 
@@ -458,6 +475,28 @@ namespace MOFranco
 
             // lblInfo.Text = $"{programa.Nome} | {programa.Alimento} | {programa.Instrucoes}";
             lblInfo.Text = $"Programa: {programa.Nome}\nAlimento: {programa.Alimento}\nInstruções: {programa.Instrucoes}";
+        }
+
+
+        // Editar programa customizado (apenas para os customizados, os fixos não podem ser editados)
+        private void EditarPrograma(ProgramaAquecimento programa)
+        {
+            var form = new FrmCadastroPrograma(programa);
+
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                // valida antes de salvar
+                ValidarCaractere(form.Programa.StringAquecimento, programa);
+
+                programa.Nome = form.Programa.Nome;
+                programa.Alimento = form.Programa.Alimento;
+                programa.Tempo = form.Programa.Tempo;
+                programa.Potencia = form.Programa.Potencia;
+                programa.StringAquecimento = form.Programa.StringAquecimento;
+                programa.Instrucoes = form.Programa.Instrucoes;
+
+                SalvarProgramasJson();
+            }
         }
 
 
@@ -490,6 +529,23 @@ namespace MOFranco
             SalvarProgramasJson(); // persistência
         }
 
+
+
+        private void CadastrarProgramaCustomizado(ProgramaAquecimento novoPrograma)
+        {
+            if (novoPrograma == null)
+                return;
+
+            // validações importantes
+            ValidarTempo(novoPrograma.Tempo);
+            ValidarPotencia(novoPrograma.Potencia);
+            ValidarCaractere(novoPrograma.StringAquecimento);
+
+            // AQUI entra o trecho que você perguntou
+            programasCustomizados.Add(novoPrograma);
+            SalvarProgramasJson();
+            CarregarProgramas();
+        }
 
 
 
@@ -529,18 +585,68 @@ namespace MOFranco
         {
             var form = new FrmCadastroPrograma();
 
-            if (form.ShowDialog() == DialogResult.OK)
+            /*if (form.ShowDialog() == DialogResult.OK)
+                {
+                    CadastrarProgramaCustomizado(
+                        form.Programa.Nome,
+                        form.Programa.Alimento,
+                        form.Programa.Tempo,
+                        form.Programa.Potencia,
+                        form.Programa.StringAquecimento,
+                        form.Programa.Instrucoes
+                    );
+                }*/
+            if (form.ShowDialog() == DialogResult.OK && form.Programa != null)
+                {
+                    CadastrarProgramaCustomizado(form.Programa);
+                }
+        }
+
+        private void btnEditar_Click(object sender, EventArgs e)
+        {
+            if (programaSelecionado == null)
             {
-                /*CadastrarProgramaCustomizado(
-                    form.Programa.Nome,
-                    form.Programa.Alimento,
-                    form.Programa.Tempo,
-                    form.Programa.Potencia,
-                    form.Programa.StringAquecimento,
-                    form.Programa.Instrucoes
-                );*/
+                MessageBox.Show("Selecione um programa primeiro.");
+                return;
+            }
+
+            EditarPrograma(programaSelecionado);
+
+            // Atualiza tela
+            SelecionarPrograma(programaSelecionado);
+        }
+
+
+        private void lstProgramas_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0) return;
+
+            var item = lstProgramas.Items[e.Index] as ProgramaAquecimento;
+
+            e.DrawBackground();
+
+            Font fonte = e.Font;
+
+            // Se for customizado → itálico
+            if (programasCustomizados.Contains(item))
+            {
+                fonte = new Font(e.Font, FontStyle.Italic);
+            }
+
+            e.Graphics.DrawString(item.Nome, fonte, Brushes.Black, e.Bounds);
+
+            e.DrawFocusRectangle();
+        }
+
+        private void lstProgramas_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstProgramas.SelectedItem is ProgramaAquecimento programa)
+            {
+                SelecionarPrograma(programa);
             }
         }
+    
+
     } // Fechamento da classe FrmPrincipal
 
 }

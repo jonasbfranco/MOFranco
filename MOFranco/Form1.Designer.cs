@@ -47,7 +47,9 @@
             btnCarnesdeBoi = new Button();
             btnLeite = new Button();
             groupBox2 = new GroupBox();
+            btnEditar = new Button();
             btnNovoPrograma = new Button();
+            lstProgramas = new ListBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
@@ -220,6 +222,7 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(btnEditar);
             groupBox2.Controls.Add(btnNovoPrograma);
             groupBox2.Location = new Point(694, 163);
             groupBox2.Name = "groupBox2";
@@ -228,21 +231,41 @@
             groupBox2.TabStop = false;
             groupBox2.Text = " Programas Customizados ";
             // 
+            // btnEditar
+            // 
+            btnEditar.Location = new Point(27, 72);
+            btnEditar.Name = "btnEditar";
+            btnEditar.Size = new Size(149, 23);
+            btnEditar.TabIndex = 1;
+            btnEditar.Text = "Editar";
+            btnEditar.UseVisualStyleBackColor = true;
+            btnEditar.Click += btnEditar_Click;
+            // 
             // btnNovoPrograma
             // 
             btnNovoPrograma.Location = new Point(27, 31);
             btnNovoPrograma.Name = "btnNovoPrograma";
-            btnNovoPrograma.Size = new Size(75, 23);
+            btnNovoPrograma.Size = new Size(149, 23);
             btnNovoPrograma.TabIndex = 0;
             btnNovoPrograma.Text = "Novo";
             btnNovoPrograma.UseVisualStyleBackColor = true;
             btnNovoPrograma.Click += btnNovoPrograma_Click;
+            // 
+            // lstProgramas
+            // 
+            lstProgramas.FormattingEnabled = true;
+            lstProgramas.Location = new Point(694, 35);
+            lstProgramas.Name = "lstProgramas";
+            lstProgramas.Size = new Size(207, 94);
+            lstProgramas.TabIndex = 15;
+            lstProgramas.SelectedIndexChanged += lstProgramas_SelectedIndexChanged;
             // 
             // FrmPrincipal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(973, 701);
+            Controls.Add(lstProgramas);
             Controls.Add(groupBox2);
             Controls.Add(lblNomePrograma);
             Controls.Add(btnCancelar);
@@ -290,5 +313,7 @@
         private Button btnFrango;
         private GroupBox groupBox2;
         private Button btnNovoPrograma;
+        private Button btnEditar;
+        private ListBox lstProgramas;
     }
 }

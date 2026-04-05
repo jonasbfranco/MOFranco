@@ -4,7 +4,6 @@ using System.Text;
 
 namespace MOFranco
 {
-    // internal class ProgramaAquecimento
     public class ProgramaAquecimento
     {
         public string Nome { get; set; }
@@ -14,5 +13,11 @@ namespace MOFranco
         public string StringAquecimento { get; set; }
         public string Instrucoes { get; set; }
 
+        
+        public override string ToString()
+            {
+                return Nome;
+            }
     }
+
 }
