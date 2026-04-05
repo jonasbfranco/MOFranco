@@ -427,7 +427,6 @@ namespace MOFranco
 
             lblTempoFormatado.Text = FormatarTempo(tempoRestante);
 
-            // lblInfo.Text = $"{programa.Nome} | {programa.Alimento} | {programa.Instrucoes}";
             lblInfo.Text = $"Programa: {programa.Nome}\nAlimento: {programa.Alimento}\nInstruções: {programa.Instrucoes}";
         }
 
