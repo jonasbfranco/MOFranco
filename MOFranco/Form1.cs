@@ -554,17 +554,20 @@ namespace MOFranco
         private void btnNovoPrograma_Click(object sender, EventArgs e)
         {
             var form = new FrmCadastroPrograma();
-            try
-            {
+
+            form.ProgramasExistentes = programasCustomizados;
+
+            //try
+            //{
                 if (form.ShowDialog() == DialogResult.OK && form.Programa != null)
                 {
                     CadastrarProgramaCustomizado(form.Programa);
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+              //  MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //}
         }
 
 

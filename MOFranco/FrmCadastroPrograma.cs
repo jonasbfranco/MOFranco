@@ -13,9 +13,13 @@ namespace MOFranco
 
         public ProgramaAquecimento? Programa { get; private set; }
 
+        public List<ProgramaAquecimento> ProgramasExistentes { get; set; }
+
+
         public FrmCadastroPrograma(ProgramaAquecimento programa = null)
         {
             InitializeComponent();
+
 
             if (programa != null)
             {
@@ -30,24 +34,43 @@ namespace MOFranco
             }
         }
 
+
         private void btnSalvar_Click(object sender, EventArgs e)
         {
             try
             {
-                string caractere = txtCaractere.Text;
-
-                if (string.IsNullOrWhiteSpace(caractere))
-                    throw new Exception("Informe um caractere.");
-
 
                 string nome = txtNome.Text;
                 string alimento = txtAlimento.Text;
                 int tempo = int.Parse(txtTempo.Text);
                 int potencia = int.Parse(txtPotencia.Text);
-                // string caractere = txtCaractere.Text;
+                string caractere = txtCaractere.Text;
                 string instrucoes = txtInstrucoes.Text;
 
-                
+                if (string.IsNullOrWhiteSpace(nome) ||
+                    string.IsNullOrWhiteSpace(alimento) ||
+                    string.IsNullOrWhiteSpace(caractere))
+                {
+                    throw new Exception("Preencha todos os campos obrigatórios.");
+                }
+
+                if (caractere.Length != 1)
+                {
+                    throw new Exception("Informe apenas um único caractere.");
+                }
+
+                // valida caracteres proibidos
+                var caracteresPadrao = new[] { "*", "~", "#", "@", "%", "." };
+
+                if (caracteresPadrao.Contains(caractere))
+                {
+                    MessageBox.Show("Caractere já utilizado por programas padrão.");
+
+                    txtCaractere.Focus();       // volta foco
+                    txtCaractere.SelectAll();   // seleciona para corrigir
+                    return;                     // NÃO fecha o form
+                }
+
 
                 Programa = new ProgramaAquecimento
                 {
@@ -66,6 +89,7 @@ namespace MOFranco
             {
                 //MessageBox.Show("Preencha os campos corretamente.");
                 MessageBox.Show(ex.Message);
+                txtCaractere.Focus();
             }
         }
 
