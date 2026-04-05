@@ -46,7 +46,10 @@
             btnFrango = new Button();
             btnCarnesdeBoi = new Button();
             btnLeite = new Button();
+            groupBox2 = new GroupBox();
+            btnNovoPrograma = new Button();
             groupBox1.SuspendLayout();
+            groupBox2.SuspendLayout();
             SuspendLayout();
             // 
             // txtTempo
@@ -215,11 +218,32 @@
             btnLeite.Text = "Leite";
             btnLeite.UseVisualStyleBackColor = true;
             // 
+            // groupBox2
+            // 
+            groupBox2.Controls.Add(btnNovoPrograma);
+            groupBox2.Location = new Point(694, 163);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new Size(200, 261);
+            groupBox2.TabIndex = 14;
+            groupBox2.TabStop = false;
+            groupBox2.Text = " Programas Customizados ";
+            // 
+            // btnNovoPrograma
+            // 
+            btnNovoPrograma.Location = new Point(27, 31);
+            btnNovoPrograma.Name = "btnNovoPrograma";
+            btnNovoPrograma.Size = new Size(75, 23);
+            btnNovoPrograma.TabIndex = 0;
+            btnNovoPrograma.Text = "Novo";
+            btnNovoPrograma.UseVisualStyleBackColor = true;
+            btnNovoPrograma.Click += btnNovoPrograma_Click;
+            // 
             // FrmPrincipal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(769, 701);
+            ClientSize = new Size(973, 701);
+            Controls.Add(groupBox2);
             Controls.Add(lblNomePrograma);
             Controls.Add(btnCancelar);
             Controls.Add(lblTempoFormatado);
@@ -239,6 +263,7 @@
             Text = "Micro Ondas Franco";
             Load += FrmPrincipal_Load;
             groupBox1.ResumeLayout(false);
+            groupBox2.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -263,5 +288,7 @@
         private Button btnLeite;
         private Button btnFeijao;
         private Button btnFrango;
+        private GroupBox groupBox2;
+        private Button btnNovoPrograma;
     }
 }

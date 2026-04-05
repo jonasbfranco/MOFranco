@@ -525,8 +525,22 @@ namespace MOFranco
             return programas.Concat(programasCustomizados).ToList();
         }
 
+        private void btnNovoPrograma_Click(object sender, EventArgs e)
+        {
+            var form = new FrmCadastroPrograma();
 
-
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                /*CadastrarProgramaCustomizado(
+                    form.Programa.Nome,
+                    form.Programa.Alimento,
+                    form.Programa.Tempo,
+                    form.Programa.Potencia,
+                    form.Programa.StringAquecimento,
+                    form.Programa.Instrucoes
+                );*/
+            }
+        }
     } // Fechamento da classe FrmPrincipal
 
 }

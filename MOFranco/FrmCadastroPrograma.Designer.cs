@@ -39,7 +39,7 @@
             lblCaractere = new Label();
             txtCaractere = new TextBox();
             lblInstruções = new Label();
-            txtInstruções = new TextBox();
+            txtInstrucoes = new TextBox();
             btnSalvar = new Button();
             btnCancelar = new Button();
             SuspendLayout();
@@ -133,13 +133,13 @@
             lblInstruções.TabIndex = 11;
             lblInstruções.Text = "Instruções";
             // 
-            // txtInstruções
+            // txtInstrucoes
             // 
-            txtInstruções.Location = new Point(44, 182);
-            txtInstruções.Multiline = true;
-            txtInstruções.Name = "txtInstruções";
-            txtInstruções.Size = new Size(568, 79);
-            txtInstruções.TabIndex = 10;
+            txtInstrucoes.Location = new Point(44, 182);
+            txtInstrucoes.Multiline = true;
+            txtInstrucoes.Name = "txtInstrucoes";
+            txtInstrucoes.Size = new Size(568, 79);
+            txtInstrucoes.TabIndex = 10;
             // 
             // btnSalvar
             // 
@@ -149,6 +149,7 @@
             btnSalvar.TabIndex = 12;
             btnSalvar.Text = "Salvar";
             btnSalvar.UseVisualStyleBackColor = true;
+            btnSalvar.Click += btnSalvar_Click;
             // 
             // btnCancelar
             // 
@@ -167,7 +168,7 @@
             Controls.Add(btnCancelar);
             Controls.Add(btnSalvar);
             Controls.Add(lblInstruções);
-            Controls.Add(txtInstruções);
+            Controls.Add(txtInstrucoes);
             Controls.Add(lblCaractere);
             Controls.Add(txtCaractere);
             Controls.Add(lblPotência);
@@ -180,6 +181,7 @@
             Controls.Add(txtNome);
             Name = "FrmCadastroPrograma";
             Text = "Cadastro de Programas de Aquecimento";
+            Load += FrmCadastroPrograma_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -197,7 +199,7 @@
         private Label lblCaractere;
         private TextBox txtCaractere;
         private Label lblInstruções;
-        private TextBox txtInstruções;
+        private TextBox txtInstrucoes;
         private Button btnSalvar;
         private Button btnCancelar;
     }
