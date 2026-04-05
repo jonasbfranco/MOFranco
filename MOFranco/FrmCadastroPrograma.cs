@@ -10,19 +10,9 @@ namespace MOFranco
 {
     public partial class FrmCadastroPrograma : Form
     {
-        
-
-
-        
-
-        private void FrmCadastroPrograma_Load(object sender, EventArgs e)
+        public FrmCadastroPrograma()
         {
-
-        }
-
-        private void btnSalvar_Click(object sender, EventArgs e)
-        {
-            
+            InitializeComponent();
         }
     }
 }
