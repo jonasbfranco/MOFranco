@@ -448,7 +448,9 @@ namespace MOFranco
             btnCarnesdeBoi.Click += btnPrograma_Click;
             btnFrango.Click += btnPrograma_Click;
             btnFeijao.Click += btnPrograma_Click;
+            
             CarregarProgramasJson();
+            CarregarProgramas(); 
 
             lstProgramas.DrawMode = DrawMode.OwnerDrawFixed;
             lstProgramas.DrawItem += lstProgramas_DrawItem;
@@ -496,6 +498,7 @@ namespace MOFranco
                 programa.Instrucoes = form.Programa.Instrucoes;
 
                 SalvarProgramasJson();
+                CarregarProgramas();
             }
         }
 
