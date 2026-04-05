@@ -46,7 +46,14 @@
             btnFrango = new Button();
             btnCarnesdeBoi = new Button();
             btnLeite = new Button();
+            groupBox2 = new GroupBox();
+            btnExcluir = new Button();
+            btnEditar = new Button();
+            btnNovoPrograma = new Button();
+            lstProgramas = new ListBox();
+            btnFecharPrograma = new Button();
             groupBox1.SuspendLayout();
+            groupBox2.SuspendLayout();
             SuspendLayout();
             // 
             // txtTempo
@@ -159,7 +166,7 @@
             // 
             // btnPipoca
             // 
-            btnPipoca.Location = new Point(53, 31);
+            btnPipoca.Location = new Point(18, 31);
             btnPipoca.Name = "btnPipoca";
             btnPipoca.Size = new Size(123, 23);
             btnPipoca.TabIndex = 12;
@@ -173,15 +180,15 @@
             groupBox1.Controls.Add(btnCarnesdeBoi);
             groupBox1.Controls.Add(btnLeite);
             groupBox1.Controls.Add(btnPipoca);
-            groupBox1.Location = new Point(279, 163);
+            groupBox1.Location = new Point(204, 163);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(381, 152);
+            groupBox1.Size = new Size(300, 152);
             groupBox1.TabIndex = 13;
             groupBox1.TabStop = false;
             // 
             // btnFeijao
             // 
-            btnFeijao.Location = new Point(133, 110);
+            btnFeijao.Location = new Point(85, 110);
             btnFeijao.Name = "btnFeijao";
             btnFeijao.Size = new Size(123, 23);
             btnFeijao.TabIndex = 16;
@@ -190,7 +197,7 @@
             // 
             // btnFrango
             // 
-            btnFrango.Location = new Point(206, 72);
+            btnFrango.Location = new Point(157, 72);
             btnFrango.Name = "btnFrango";
             btnFrango.Size = new Size(123, 23);
             btnFrango.TabIndex = 15;
@@ -199,7 +206,7 @@
             // 
             // btnCarnesdeBoi
             // 
-            btnCarnesdeBoi.Location = new Point(53, 72);
+            btnCarnesdeBoi.Location = new Point(18, 72);
             btnCarnesdeBoi.Name = "btnCarnesdeBoi";
             btnCarnesdeBoi.Size = new Size(123, 23);
             btnCarnesdeBoi.TabIndex = 14;
@@ -208,18 +215,81 @@
             // 
             // btnLeite
             // 
-            btnLeite.Location = new Point(206, 31);
+            btnLeite.Location = new Point(157, 31);
             btnLeite.Name = "btnLeite";
             btnLeite.Size = new Size(123, 23);
             btnLeite.TabIndex = 13;
             btnLeite.Text = "Leite";
             btnLeite.UseVisualStyleBackColor = true;
             // 
+            // groupBox2
+            // 
+            groupBox2.Controls.Add(btnExcluir);
+            groupBox2.Controls.Add(btnEditar);
+            groupBox2.Controls.Add(btnNovoPrograma);
+            groupBox2.Location = new Point(519, 163);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new Size(160, 152);
+            groupBox2.TabIndex = 14;
+            groupBox2.TabStop = false;
+            groupBox2.Text = " Programas Customizados ";
+            // 
+            // btnExcluir
+            // 
+            btnExcluir.Location = new Point(27, 110);
+            btnExcluir.Name = "btnExcluir";
+            btnExcluir.Size = new Size(114, 23);
+            btnExcluir.TabIndex = 2;
+            btnExcluir.Text = "Excluir";
+            btnExcluir.UseVisualStyleBackColor = true;
+            // 
+            // btnEditar
+            // 
+            btnEditar.Location = new Point(27, 72);
+            btnEditar.Name = "btnEditar";
+            btnEditar.Size = new Size(114, 23);
+            btnEditar.TabIndex = 1;
+            btnEditar.Text = "Editar";
+            btnEditar.UseVisualStyleBackColor = true;
+            btnEditar.Click += btnEditar_Click;
+            // 
+            // btnNovoPrograma
+            // 
+            btnNovoPrograma.Location = new Point(27, 31);
+            btnNovoPrograma.Name = "btnNovoPrograma";
+            btnNovoPrograma.Size = new Size(114, 23);
+            btnNovoPrograma.TabIndex = 0;
+            btnNovoPrograma.Text = "Novo";
+            btnNovoPrograma.UseVisualStyleBackColor = true;
+            btnNovoPrograma.Click += btnNovoPrograma_Click;
+            // 
+            // lstProgramas
+            // 
+            lstProgramas.FormattingEnabled = true;
+            lstProgramas.Location = new Point(694, 173);
+            lstProgramas.Name = "lstProgramas";
+            lstProgramas.Size = new Size(207, 139);
+            lstProgramas.TabIndex = 15;
+            lstProgramas.SelectedIndexChanged += lstProgramas_SelectedIndexChanged;
+            // 
+            // btnFecharPrograma
+            // 
+            btnFecharPrograma.Location = new Point(767, 666);
+            btnFecharPrograma.Name = "btnFecharPrograma";
+            btnFecharPrograma.Size = new Size(134, 23);
+            btnFecharPrograma.TabIndex = 16;
+            btnFecharPrograma.Text = "Fechar Programa";
+            btnFecharPrograma.UseVisualStyleBackColor = true;
+            btnFecharPrograma.Click += btnFecharPrograma_Click;
+            // 
             // FrmPrincipal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(769, 701);
+            ClientSize = new Size(973, 701);
+            Controls.Add(btnFecharPrograma);
+            Controls.Add(lstProgramas);
+            Controls.Add(groupBox2);
             Controls.Add(lblNomePrograma);
             Controls.Add(btnCancelar);
             Controls.Add(lblTempoFormatado);
@@ -239,6 +309,7 @@
             Text = "Micro Ondas Franco";
             Load += FrmPrincipal_Load;
             groupBox1.ResumeLayout(false);
+            groupBox2.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -263,5 +334,11 @@
         private Button btnLeite;
         private Button btnFeijao;
         private Button btnFrango;
+        private GroupBox groupBox2;
+        private Button btnNovoPrograma;
+        private Button btnEditar;
+        private ListBox lstProgramas;
+        private Button btnExcluir;
+        private Button btnFecharPrograma;
     }
 }

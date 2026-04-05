@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json;
 
 
 namespace MOFranco
@@ -25,7 +26,7 @@ namespace MOFranco
         private EstadoAquecimento estadoAtual = EstadoAquecimento.Parado;
 
         private List<ProgramaAquecimento> programas = new List<ProgramaAquecimento>
-        
+
         {
             new ProgramaAquecimento
             {
@@ -75,6 +76,27 @@ namespace MOFranco
         };
 
         private ProgramaAquecimento programaSelecionado = null;
+
+        private List<ProgramaAquecimento> programasCustomizados = new List<ProgramaAquecimento>();
+
+
+        // Carregar Programas
+        private void CarregarProgramas()
+        {
+            lstProgramas.Items.Clear();
+
+            // 🔹 Programas padrão
+            foreach (var p in programas)
+            {
+                lstProgramas.Items.Add(p);
+            }
+
+            // 🔹 Programas customizados
+            foreach (var p in programasCustomizados)
+            {
+                lstProgramas.Items.Add(p);
+            }
+        }
 
 
 
@@ -272,7 +294,7 @@ namespace MOFranco
         private void ValidarTempo(int tempo)
         {
             if (tempo < 1 || tempo > 900)
-                throw new Exception("O tempo deve estar entre 1 e 120 segundos.");
+                throw new Exception("O tempo deve estar entre 1 e 900 segundos.");
         }
 
         // Validação de potência
@@ -384,6 +406,25 @@ namespace MOFranco
         }
 
 
+        private void ValidarCaractere(string caractere, ProgramaAquecimento programaAtual = null)
+        {
+            var caracteresPadrao = new[] { "*", "~", "#", "@", "%", "." };
+
+            if (caracteresPadrao.Contains(caractere))
+                throw new Exception("Caractere inválido. Já usado por programas padrão.");
+
+            bool existe = programasCustomizados.Any(p =>
+                p.StringAquecimento == caractere && p != programaAtual);
+
+            if (existe)
+                throw new Exception("Caractere já utilizado em outro programa.");
+        }
+
+
+
+
+
+
         private void FrmPrincipal_Load(object sender, EventArgs e)
         {
             // Inicializa estado da UI ao carregar
@@ -407,9 +448,16 @@ namespace MOFranco
             btnCarnesdeBoi.Click += btnPrograma_Click;
             btnFrango.Click += btnPrograma_Click;
             btnFeijao.Click += btnPrograma_Click;
+
+            CarregarProgramasJson();
+            CarregarProgramas();
+
+            lstProgramas.DrawMode = DrawMode.OwnerDrawFixed;
+            lstProgramas.DrawItem += lstProgramas_DrawItem;
+
         }
 
-        
+
 
 
         private void SelecionarPrograma(ProgramaAquecimento programa)
@@ -432,6 +480,50 @@ namespace MOFranco
         }
 
 
+        // Editar programa customizado (apenas para os customizados, os fixos não podem ser editados)
+        private void EditarPrograma(ProgramaAquecimento programa)
+        {
+            var form = new FrmCadastroPrograma(programa);
+
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                // valida antes de salvar
+                ValidarCaractere(form.Programa.StringAquecimento, programa);
+
+                programa.Nome = form.Programa.Nome;
+                programa.Alimento = form.Programa.Alimento;
+                programa.Tempo = form.Programa.Tempo;
+                programa.Potencia = form.Programa.Potencia;
+                programa.StringAquecimento = form.Programa.StringAquecimento;
+                programa.Instrucoes = form.Programa.Instrucoes;
+
+                SalvarProgramasJson();
+                CarregarProgramas();
+            }
+        }
+
+
+
+
+        private void CadastrarProgramaCustomizado(ProgramaAquecimento novoPrograma)
+        {
+            if (novoPrograma == null)
+                return;
+
+            // validações importantes
+            ValidarTempo(novoPrograma.Tempo);
+            ValidarPotencia(novoPrograma.Potencia);
+            ValidarCaractere(novoPrograma.StringAquecimento);
+
+            // AQUI entra o trecho que você perguntou
+            programasCustomizados.Add(novoPrograma);
+            SalvarProgramasJson();
+            CarregarProgramas();
+            lstProgramas.SelectedItem = novoPrograma;
+        }
+
+
+
         private void btnPrograma_Click(object sender, EventArgs e)
         {
             var botao = sender as Button;
@@ -440,6 +532,93 @@ namespace MOFranco
             {
                 SelecionarPrograma(programa);
             }
+        }
+
+
+        private void SalvarProgramasJson()
+        {
+            string json = JsonSerializer.Serialize(programasCustomizados);
+            File.WriteAllText("programas.json", json);
+        }
+
+        private void CarregarProgramasJson()
+        {
+            if (File.Exists("programas.json"))
+            {
+                string json = File.ReadAllText("programas.json");
+                programasCustomizados = JsonSerializer.Deserialize<List<ProgramaAquecimento>>(json) ?? new List<ProgramaAquecimento>();
+            }
+        }
+
+
+        private void btnNovoPrograma_Click(object sender, EventArgs e)
+        {
+            var form = new FrmCadastroPrograma();
+
+            form.ProgramasExistentes = programasCustomizados;
+
+            //try
+            //{
+                if (form.ShowDialog() == DialogResult.OK && form.Programa != null)
+                {
+                    CadastrarProgramaCustomizado(form.Programa);
+                }
+            //}
+            //catch (Exception ex)
+            //{
+              //  MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //}
+        }
+
+
+        private void btnEditar_Click(object sender, EventArgs e)
+        {
+            if (programaSelecionado == null)
+            {
+                MessageBox.Show("Selecione um programa primeiro.");
+                return;
+            }
+
+            EditarPrograma(programaSelecionado);
+
+            // Atualiza tela
+            SelecionarPrograma(programaSelecionado);
+        }
+
+
+        private void lstProgramas_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0) return;
+
+            var item = lstProgramas.Items[e.Index] as ProgramaAquecimento;
+
+            e.DrawBackground();
+
+            Font fonte = e.Font;
+
+            // Se for customizado → itálico
+            if (programasCustomizados.Contains(item))
+            {
+                fonte = new Font(e.Font, FontStyle.Italic);
+            }
+
+            e.Graphics.DrawString(item.Nome, fonte, Brushes.Black, e.Bounds);
+
+            e.DrawFocusRectangle();
+        }
+
+        private void lstProgramas_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstProgramas.SelectedItem is ProgramaAquecimento programa)
+            {
+                SelecionarPrograma(programa);
+            }
+        }
+
+        private void btnFecharPrograma_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
 
