@@ -16,6 +16,8 @@ namespace MOFranco
     public partial class FrmPrincipal : Form
     {
 
+        private ProgramaService service;
+
         // Variáveis
         private int tempoRestante = 0;
         private int potenciaAtual = 10;
@@ -121,9 +123,9 @@ namespace MOFranco
 
 
                 // Se já está rodando → soma +30
-                if (programaSelecionado != null)
+                if (programas.Contains(programaSelecionado))
                 {
-                    // NÃO permite +30 para programa pré-definido
+                    return; // NÃO permite +30 para programa pré-definido
                 }
                 else if (emExecucao && !pausado)
                 {
@@ -198,7 +200,6 @@ namespace MOFranco
                 emExecucao = true;
                 pausado = false;
 
-                lblStatus.Text = "Aquecendo...";
 
                 await AquecerAsync();
 
@@ -259,7 +260,10 @@ namespace MOFranco
                     progresso.Append(Environment.NewLine);
                 }
 
-                string caractere = programaSelecionado?.StringAquecimento ?? ".";
+                string caractere = string.IsNullOrEmpty(programaSelecionado?.StringAquecimento)
+                ? "."
+                : programaSelecionado.StringAquecimento;
+               
                 progresso.Append(new string(caractere[0], potenciaAtual));
 
 
@@ -269,7 +273,7 @@ namespace MOFranco
                     lblTempoFormatado.Text = FormatarTempo(tempoRestante);
 
                     int progressoAtual = tempoInicial - tempoRestante;
-                    // progressBar1.Value = Math.Min(progressoAtual, progressBar1.Maximum);
+
                     progressBar1.Value = Math.Max(progressBar1.Minimum,
                         Math.Min(progressoAtual, progressBar1.Maximum));
 
@@ -406,28 +410,14 @@ namespace MOFranco
         }
 
 
-        private void ValidarCaractere(string caractere, ProgramaAquecimento programaAtual = null)
-        {
-            var caracteresPadrao = new[] { "*", "~", "#", "@", "%", "." };
-
-            if (caracteresPadrao.Contains(caractere))
-                throw new Exception("Caractere inválido. Já usado por programas padrão.");
-
-            bool existe = programasCustomizados.Any(p =>
-                p.StringAquecimento == caractere && p != programaAtual);
-
-            if (existe)
-                throw new Exception("Caractere já utilizado em outro programa.");
-        }
-
-
-
-
 
 
         private void FrmPrincipal_Load(object sender, EventArgs e)
         {
             // Inicializa estado da UI ao carregar
+
+            service = new ProgramaService(programasCustomizados);
+
             progressBar1.Minimum = 0;
             progressBar1.Maximum = 100;
             progressBar1.Value = 0;
@@ -491,7 +481,7 @@ namespace MOFranco
             if (form.ShowDialog() == DialogResult.OK)
             {
                 // valida antes de salvar
-                ValidarCaractere(form.Programa.StringAquecimento, programa);
+                service.ValidarCaractere(form.Programa.StringAquecimento, programa);
 
                 programa.Nome = form.Programa.Nome;
                 programa.Alimento = form.Programa.Alimento;
@@ -503,26 +493,6 @@ namespace MOFranco
                 SalvarProgramasJson();
                 CarregarProgramas();
             }
-        }
-
-
-
-
-        private void CadastrarProgramaCustomizado(ProgramaAquecimento novoPrograma)
-        {
-            if (novoPrograma == null)
-                return;
-
-            // validações importantes
-            ValidarTempo(novoPrograma.Tempo);
-            ValidarPotencia(novoPrograma.Potencia);
-            ValidarCaractere(novoPrograma.StringAquecimento);
-
-            // AQUI entra o trecho que você perguntou
-            programasCustomizados.Add(novoPrograma);
-            SalvarProgramasJson();
-            CarregarProgramas();
-            lstProgramas.SelectedItem = novoPrograma;
         }
 
 
@@ -560,17 +530,13 @@ namespace MOFranco
 
             form.ProgramasExistentes = programasCustomizados;
 
-            //try
-            //{
             if (form.ShowDialog() == DialogResult.OK && form.Programa != null)
             {
-                CadastrarProgramaCustomizado(form.Programa);
+                // CadastrarProgramaCustomizado(form.Programa);
+                service.Adicionar(form.Programa);
+                SalvarProgramasJson();
+                CarregarProgramas();
             }
-            //}
-            //catch (Exception ex)
-            //{
-            //  MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //}
         }
 
 
@@ -655,7 +621,7 @@ namespace MOFranco
                 return;
 
             // Remove
-            programasCustomizados.Remove(programa);
+            service.Remover(programa);
 
             // Salva
             SalvarProgramasJson();
