@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
 namespace MOFranco
 {
+
+
     public partial class FrmCadastroPrograma : Form
     {
+
+        private bool modoEdicao = false;
+
+        private const string TITULO_VALIDACAO = "Validação";
 
         public ProgramaAquecimento? Programa { get; private set; }
 
@@ -20,10 +23,10 @@ namespace MOFranco
         {
             InitializeComponent();
 
-
             if (programa != null)
             {
                 Programa = programa;
+                modoEdicao = true;
 
                 txtNome.Text = programa.Nome;
                 txtAlimento.Text = programa.Alimento;
@@ -32,6 +35,7 @@ namespace MOFranco
                 txtCaractere.Text = programa.StringAquecimento;
                 txtInstrucoes.Text = programa.Instrucoes;
             }
+
         }
 
 
@@ -47,7 +51,7 @@ namespace MOFranco
                 // VALIDAÇÕES DE TEXTO
                 if (string.IsNullOrWhiteSpace(nome))
                 {
-                    MessageBox.Show("Nome precisa ser preenchido.", "Validação",
+                    MessageBox.Show("Nome precisa ser preenchido.", TITULO_VALIDACAO,
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     txtNome.Focus();
                     return;
@@ -55,7 +59,7 @@ namespace MOFranco
 
                 if (string.IsNullOrWhiteSpace(alimento))
                 {
-                    MessageBox.Show("Alimento precisa ser preenchido.", "Validação",
+                    MessageBox.Show("Alimento precisa ser preenchido.", TITULO_VALIDACAO,
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     txtAlimento.Focus();
                     return;
@@ -65,26 +69,47 @@ namespace MOFranco
                 // VALIDAÇÃO DE NÚMEROS
                 if (!int.TryParse(txtTempo.Text, out int tempo))
                 {
-                    MessageBox.Show("Tempo inválido. Digite apenas números.", "Validação",
+                    MessageBox.Show("Tempo inválido. Digite apenas números.", TITULO_VALIDACAO,
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtTempo.Focus();
+                    txtTempo.SelectAll();
+                    return;
+                }
+                // VALIDAÇÃO DE REGRAS DE NEGÓCIO
+                if (tempo < 1 || tempo > 900)
+                {
+                    MessageBox.Show("Tempo deve estar entre 1 e 900 segundos.", "Validação",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     txtTempo.Focus();
                     txtTempo.SelectAll();
                     return;
                 }
 
+
                 if (!int.TryParse(txtPotencia.Text, out int potencia))
                 {
-                    MessageBox.Show("Potência inválida. Digite apenas números.", "Validação",
+                    MessageBox.Show("Potência inválida. Digite apenas números.", TITULO_VALIDACAO,
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtPotencia.Focus();
+                    txtPotencia.SelectAll();
+                    return;
+                }
+                // VALIDAÇÃO DE REGRAS DE NEGÓCIO
+                if (potencia < 1 || potencia > 10)
+                {
+                    MessageBox.Show("Potência deve estar entre 1 e 10.", "Validação",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     txtPotencia.Focus();
                     txtPotencia.SelectAll();
                     return;
                 }
 
+
+
                 // VALIDAÇÕES DE TEXTO
                 if (string.IsNullOrWhiteSpace(caractere))
                 {
-                    MessageBox.Show("Caractere precisa ser preenchido.", "Validação",
+                    MessageBox.Show("Caractere precisa ser preenchido.", TITULO_VALIDACAO,
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     txtCaractere.Focus();
                     return;
@@ -94,12 +119,13 @@ namespace MOFranco
                 // VALIDAÇÃO DO CARACTERE
                 if (caractere.Length != 1)
                 {
-                    MessageBox.Show("Informe apenas um único caractere.", "Validação",
+                    MessageBox.Show("Informe apenas um único caractere.", TITULO_VALIDACAO,
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     txtCaractere.Focus();
                     txtCaractere.SelectAll();
                     return;
                 }
+
 
                 var caracteresPadrao = new[] { "*", "~", "#", "@", "%", "." };
 
@@ -117,19 +143,52 @@ namespace MOFranco
                     return;
                 }
 
-                // CRIA O PROGRAMA
-                Programa = new ProgramaAquecimento
+                // valida duplicidade entre customizados
+                if (ProgramasExistentes != null)
                 {
-                    Nome = nome,
-                    Alimento = alimento,
-                    Tempo = tempo,
-                    Potencia = potencia,
-                    StringAquecimento = caractere,
-                    Instrucoes = instrucoes
-                };
+                    bool existe = ProgramasExistentes.Any(p =>
+                        p.StringAquecimento == caractere);
 
-                DialogResult = DialogResult.OK;
-                Close();
+                    if (existe)
+                    {
+                        MessageBox.Show(
+                            "Este caractere já está sendo usado por outro programa.",
+                            "Validação",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning
+                        );
+
+                        txtCaractere.Focus();
+                        txtCaractere.SelectAll();
+                        return;
+                    }
+                }
+
+
+                // Cria o programa com os dados preenchidos
+                if (modoEdicao && Programa != null)
+                {
+                    // Atualiza o mesmo objeto
+                    Programa.Nome = nome;
+                    Programa.Alimento = alimento;
+                    Programa.Tempo = tempo;
+                    Programa.Potencia = potencia;
+                    Programa.StringAquecimento = caractere;
+                    Programa.Instrucoes = instrucoes;
+                }
+                else
+                {
+                    // Cria novo
+                    Programa = new ProgramaAquecimento
+                    {
+                        Nome = nome,
+                        Alimento = alimento,
+                        Tempo = tempo,
+                        Potencia = potencia,
+                        StringAquecimento = caractere,
+                        Instrucoes = instrucoes
+                    };
+                }
             }
             catch (Exception ex)
             {

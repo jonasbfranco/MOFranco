@@ -16,6 +16,8 @@ namespace MOFranco
     public partial class FrmPrincipal : Form
     {
 
+        private ProgramaService service;
+
         // Variáveis
         private int tempoRestante = 0;
         private int potenciaAtual = 10;
@@ -121,7 +123,7 @@ namespace MOFranco
 
 
                 // Se já está rodando → soma +30
-                if (programaSelecionado != null)
+                if (programas.Contains(programaSelecionado))
                 {
                     // NÃO permite +30 para programa pré-definido
                 }
@@ -274,7 +276,7 @@ namespace MOFranco
                         Math.Min(progressoAtual, progressBar1.Maximum));
 
                     lblInfo.Text = $"Status: {lblStatus.Text} | Tempo: {FormatarTempo(tempoRestante)} | Potência: {potenciaAtual}";
-                    txtTempo.Text = tempoRestante.ToString();
+                    txtTempo.Text = FormatarTempo(tempoRestante);
                 }));
             }
 
@@ -405,7 +407,7 @@ namespace MOFranco
             lblStatus.Text = "Aquecendo...";
         }
 
-
+        // TODO: mover validação para ProgramaService
         private void ValidarCaractere(string caractere, ProgramaAquecimento programaAtual = null)
         {
             var caracteresPadrao = new[] { "*", "~", "#", "@", "%", "." };
@@ -428,6 +430,9 @@ namespace MOFranco
         private void FrmPrincipal_Load(object sender, EventArgs e)
         {
             // Inicializa estado da UI ao carregar
+
+            service = new ProgramaService(programasCustomizados);
+
             progressBar1.Minimum = 0;
             progressBar1.Maximum = 100;
             progressBar1.Value = 0;
@@ -507,26 +512,6 @@ namespace MOFranco
 
 
 
-
-        private void CadastrarProgramaCustomizado(ProgramaAquecimento novoPrograma)
-        {
-            if (novoPrograma == null)
-                return;
-
-            // validações importantes
-            ValidarTempo(novoPrograma.Tempo);
-            ValidarPotencia(novoPrograma.Potencia);
-            ValidarCaractere(novoPrograma.StringAquecimento);
-
-            // AQUI entra o trecho que você perguntou
-            programasCustomizados.Add(novoPrograma);
-            SalvarProgramasJson();
-            CarregarProgramas();
-            lstProgramas.SelectedItem = novoPrograma;
-        }
-
-
-
         private void btnPrograma_Click(object sender, EventArgs e)
         {
             var botao = sender as Button;
@@ -560,17 +545,13 @@ namespace MOFranco
 
             form.ProgramasExistentes = programasCustomizados;
 
-            //try
-            //{
             if (form.ShowDialog() == DialogResult.OK && form.Programa != null)
             {
-                CadastrarProgramaCustomizado(form.Programa);
+                // CadastrarProgramaCustomizado(form.Programa);
+                service.Adicionar(form.Programa);
+                SalvarProgramasJson();
+                CarregarProgramas();
             }
-            //}
-            //catch (Exception ex)
-            //{
-            //  MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //}
         }
 
 
@@ -655,7 +636,7 @@ namespace MOFranco
                 return;
 
             // Remove
-            programasCustomizados.Remove(programa);
+            service.Remover(programa);
 
             // Salva
             SalvarProgramasJson();
