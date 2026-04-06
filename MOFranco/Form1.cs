@@ -125,7 +125,7 @@ namespace MOFranco
                 // Se já está rodando → soma +30
                 if (programas.Contains(programaSelecionado))
                 {
-                    // NÃO permite +30 para programa pré-definido
+                    return; // NÃO permite +30 para programa pré-definido
                 }
                 else if (emExecucao && !pausado)
                 {
@@ -200,7 +200,6 @@ namespace MOFranco
                 emExecucao = true;
                 pausado = false;
 
-                lblStatus.Text = "Aquecendo...";
 
                 await AquecerAsync();
 
@@ -261,7 +260,10 @@ namespace MOFranco
                     progresso.Append(Environment.NewLine);
                 }
 
-                string caractere = programaSelecionado?.StringAquecimento ?? ".";
+                string caractere = string.IsNullOrEmpty(programaSelecionado?.StringAquecimento)
+                ? "."
+                : programaSelecionado.StringAquecimento;
+               
                 progresso.Append(new string(caractere[0], potenciaAtual));
 
 
@@ -271,12 +273,12 @@ namespace MOFranco
                     lblTempoFormatado.Text = FormatarTempo(tempoRestante);
 
                     int progressoAtual = tempoInicial - tempoRestante;
-                    // progressBar1.Value = Math.Min(progressoAtual, progressBar1.Maximum);
+
                     progressBar1.Value = Math.Max(progressBar1.Minimum,
                         Math.Min(progressoAtual, progressBar1.Maximum));
 
                     lblInfo.Text = $"Status: {lblStatus.Text} | Tempo: {FormatarTempo(tempoRestante)} | Potência: {potenciaAtual}";
-                    txtTempo.Text = FormatarTempo(tempoRestante);
+                    txtTempo.Text = tempoRestante.ToString();
                 }));
             }
 
@@ -407,23 +409,6 @@ namespace MOFranco
             lblStatus.Text = "Aquecendo...";
         }
 
-        // TODO: mover validação para ProgramaService
-        private void ValidarCaractere(string caractere, ProgramaAquecimento programaAtual = null)
-        {
-            var caracteresPadrao = new[] { "*", "~", "#", "@", "%", "." };
-
-            if (caracteresPadrao.Contains(caractere))
-                throw new Exception("Caractere inválido. Já usado por programas padrão.");
-
-            bool existe = programasCustomizados.Any(p =>
-                p.StringAquecimento == caractere && p != programaAtual);
-
-            if (existe)
-                throw new Exception("Caractere já utilizado em outro programa.");
-        }
-
-
-
 
 
 
@@ -496,7 +481,7 @@ namespace MOFranco
             if (form.ShowDialog() == DialogResult.OK)
             {
                 // valida antes de salvar
-                ValidarCaractere(form.Programa.StringAquecimento, programa);
+                service.ValidarCaractere(form.Programa.StringAquecimento, programa);
 
                 programa.Nome = form.Programa.Nome;
                 programa.Alimento = form.Programa.Alimento;
